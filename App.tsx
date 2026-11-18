@@ -26,21 +26,21 @@ interface Transaction {
 const CATEGORIES = [
   { name: 'Food & Dining', icon: '🍔', type: 'expense' },
   { name: 'Education & Books', icon: '📚', type: 'expense' },
-  { name: 'Coffee & Snacks', icon: '☕', type: 'expense' },
+  { name: 'Chai & Snacks', icon: '☕', type: 'expense' },
   { name: 'Entertainment', icon: '🎮', type: 'expense' },
-  { name: 'Transportation', icon: '🚌', type: 'expense' },
+  { name: 'Transport / Petrol', icon: '🚌', type: 'expense' },
   { name: 'Allowance / Salary', icon: '💰', type: 'income' },
-  { name: 'Freelance / Side Gig', icon: '💻', type: 'income' },
+  { name: 'Freelance / Tutoring', icon: '💻', type: 'income' },
 ];
 
 export default function App() {
   const [transactions, setTransactions] = useState<Transaction[]>([
-    { id: '1', title: 'Monthly Allowance', amount: 500, type: 'income', category: 'Allowance / Salary', date: 'Nov 15', icon: '💰' },
-    { id: '2', title: 'College Cafeteria', amount: 14.5, type: 'expense', category: 'Food & Dining', date: 'Nov 16', icon: '🍔' },
-    { id: '3', title: 'Python Programming Book', amount: 35.0, type: 'expense', category: 'Education & Books', date: 'Nov 17', icon: '📚' },
-    { id: '4', title: 'Campus Coffee Shop', amount: 6.25, type: 'expense', category: 'Coffee & Snacks', date: 'Nov 17', icon: '☕' },
-    { id: '5', title: 'Tutoring Junior Student', amount: 80.0, type: 'income', category: 'Freelance / Side Gig', date: 'Nov 18', icon: '💻' },
-    { id: '6', title: 'Bus Monthly Pass', amount: 25.0, type: 'expense', category: 'Transportation', date: 'Nov 18', icon: '🚌' },
+    { id: '1', title: 'Monthly Pocket Allowance', amount: 25000, type: 'income', category: 'Allowance / Salary', date: 'Nov 15', icon: '💰' },
+    { id: '2', title: 'College Cafeteria Lunch', amount: 450, type: 'expense', category: 'Food & Dining', date: 'Nov 16', icon: '🍔' },
+    { id: '3', title: 'Python Programming Guide', amount: 1800, type: 'expense', category: 'Education & Books', date: 'Nov 17', icon: '📚' },
+    { id: '4', title: 'Campus Chai & Paratha', amount: 250, type: 'expense', category: 'Chai & Snacks', date: 'Nov 17', icon: '☕' },
+    { id: '5', title: 'Tutoring Coding Student', amount: 8000, type: 'income', category: 'Freelance / Tutoring', date: 'Nov 18', icon: '💻' },
+    { id: '6', title: 'Bus Monthly Pass / Fuel', amount: 2500, type: 'expense', category: 'Transport / Petrol', date: 'Nov 18', icon: '🚌' },
   ]);
 
   const [filter, setFilter] = useState<'all' | 'income' | 'expense'>('all');
@@ -62,7 +62,7 @@ export default function App() {
     .reduce((acc, t) => acc + t.amount, 0);
 
   const balance = totalIncome - totalExpense;
-  const monthlyBudgetLimit = 400;
+  const monthlyBudgetLimit = 20000; // Sample student budget goal in PKR
   const budgetProgress = Math.min((totalExpense / monthlyBudgetLimit) * 100, 100);
 
   const filteredTransactions = transactions.filter(t => {
@@ -73,7 +73,7 @@ export default function App() {
   const handleAddTransaction = () => {
     const parsedAmount = parseFloat(amount);
     if (!title.trim() || isNaN(parsedAmount) || parsedAmount <= 0) {
-      Alert.alert('Invalid Entry', 'Please provide a valid title and positive amount.');
+      Alert.alert('Invalid Entry', 'Please provide a valid title and positive amount in PKR.');
       return;
     }
 
@@ -95,6 +95,10 @@ export default function App() {
 
   const handleDeleteTransaction = (id: string) => {
     setTransactions(transactions.filter(t => t.id !== id));
+  };
+
+  const formatPKR = (val: number) => {
+    return 'Rs ' + Math.abs(val).toLocaleString('en-US');
   };
 
   return (
@@ -121,7 +125,7 @@ export default function App() {
         <View style={styles.balanceCard}>
           <Text style={styles.balanceLabel}>CURRENT TOTAL BALANCE</Text>
           <Text style={[styles.balanceAmount, { color: balance >= 0 ? '#f8fafc' : '#f43f5e' }]}>
-            ${balance.toFixed(2)}
+            {balance < 0 ? '-' : ''}{formatPKR(balance)}
           </Text>
 
           {/* Income & Expense Row */}
@@ -130,7 +134,7 @@ export default function App() {
               <View style={[styles.metricDot, { backgroundColor: '#10b981' }]} />
               <View>
                 <Text style={styles.metricSub}>Total Income</Text>
-                <Text style={styles.incomeText}>+${totalIncome.toFixed(2)}</Text>
+                <Text style={styles.incomeText}>+{formatPKR(totalIncome)}</Text>
               </View>
             </View>
 
@@ -140,7 +144,7 @@ export default function App() {
               <View style={[styles.metricDot, { backgroundColor: '#f43f5e' }]} />
               <View>
                 <Text style={styles.metricSub}>Total Expenses</Text>
-                <Text style={styles.expenseText}>-${totalExpense.toFixed(2)}</Text>
+                <Text style={styles.expenseText}>-{formatPKR(totalExpense)}</Text>
               </View>
             </View>
           </View>
@@ -148,7 +152,7 @@ export default function App() {
           {/* Monthly Budget Progress */}
           <View style={styles.progressContainer}>
             <View style={styles.progressLabelRow}>
-              <Text style={styles.progressLabel}>Monthly Limit: ${monthlyBudgetLimit}</Text>
+              <Text style={styles.progressLabel}>Monthly Limit: {formatPKR(monthlyBudgetLimit)}</Text>
               <Text style={styles.progressPercent}>{budgetProgress.toFixed(0)}% Spent</Text>
             </View>
             <View style={styles.progressBarBg}>
@@ -208,7 +212,7 @@ export default function App() {
                   { color: item.type === 'income' ? '#10b981' : '#f43f5e' },
                 ]}
               >
-                {item.type === 'income' ? '+' : '-'}${item.amount.toFixed(2)}
+                {item.type === 'income' ? '+' : '-'}{formatPKR(item.amount)}
               </Text>
               <TouchableOpacity
                 onPress={() => handleDeleteTransaction(item.id)}
@@ -269,17 +273,17 @@ export default function App() {
             <Text style={styles.inputLabel}>TITLE / DESCRIPTION</Text>
             <TextInput
               style={styles.input}
-              placeholder="e.g. Campus Cafeteria, Books"
+              placeholder="e.g. Cafeteria Lunch, Books, Chai"
               placeholderTextColor="#64748b"
               value={title}
               onChangeText={setTitle}
             />
 
             {/* Amount Input */}
-            <Text style={styles.inputLabel}>AMOUNT ($)</Text>
+            <Text style={styles.inputLabel}>AMOUNT (PKR)</Text>
             <TextInput
               style={styles.input}
-              placeholder="0.00"
+              placeholder="e.g. 500, 2000"
               placeholderTextColor="#64748b"
               keyboardType="decimal-pad"
               value={amount}
@@ -387,7 +391,7 @@ const styles = StyleSheet.create({
     letterSpacing: 1,
   },
   balanceAmount: {
-    fontSize: 36,
+    fontSize: 32,
     fontWeight: '800',
     marginVertical: 8,
   },
@@ -417,13 +421,13 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   incomeText: {
-    fontSize: 15,
+    fontSize: 14,
     fontWeight: '700',
     color: '#10b981',
     marginTop: 2,
   },
   expenseText: {
-    fontSize: 15,
+    fontSize: 14,
     fontWeight: '700',
     color: '#f43f5e',
     marginTop: 2,
@@ -546,7 +550,7 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   txAmount: {
-    fontSize: 15,
+    fontSize: 14,
     fontWeight: '700',
   },
   deleteText: {
