@@ -34,14 +34,7 @@ const CATEGORIES = [
 ];
 
 export default function App() {
-  const [transactions, setTransactions] = useState<Transaction[]>([
-    { id: '1', title: 'Monthly Pocket Allowance', amount: 25000, type: 'income', category: 'Allowance / Salary', date: 'Nov 15', icon: '💰' },
-    { id: '2', title: 'College Cafeteria Lunch', amount: 450, type: 'expense', category: 'Food & Dining', date: 'Nov 16', icon: '🍔' },
-    { id: '3', title: 'Python Programming Guide', amount: 1800, type: 'expense', category: 'Education & Books', date: 'Nov 17', icon: '📚' },
-    { id: '4', title: 'Campus Chai & Paratha', amount: 250, type: 'expense', category: 'Chai & Snacks', date: 'Nov 17', icon: '☕' },
-    { id: '5', title: 'Tutoring Coding Student', amount: 8000, type: 'income', category: 'Freelance / Tutoring', date: 'Nov 18', icon: '💻' },
-    { id: '6', title: 'Bus Monthly Pass / Fuel', amount: 2500, type: 'expense', category: 'Transport / Petrol', date: 'Nov 18', icon: '🚌' },
-  ]);
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
 
   const [filter, setFilter] = useState<'all' | 'income' | 'expense'>('all');
   const [modalVisible, setModalVisible] = useState(false);
