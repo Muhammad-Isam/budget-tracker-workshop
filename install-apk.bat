@@ -103,17 +103,26 @@ echo.
 echo [STEP 2/3] Installing APK onto device...
 %ADB_CMD% install -r -d "%APK_PATH%"
 if %ERRORLEVEL% neq 0 (
-    echo [RETRY] Standard install encountered an issue, attempting stream install...
-    %ADB_CMD% install -r -d -g "%APK_PATH%"
+    echo.
+    echo [NOTICE] Direct ADB install was blocked by device security policy.
+    echo On Xiaomi / Redmi / HyperOS devices:
+    echo   - Go to Settings ^> Additional Settings ^> Developer Options.
+    echo   - Enable "Install via USB" (and accept security prompt).
+    echo.
+    echo OPTION B (INSTANT 1-TAP INSTALL ON PHONE):
+    echo   The APK has ALREADY been transferred to your phone's Downloads folder!
+    echo   Simply open the "Downloads" or "File Manager" app on your phone,
+    echo   tap "BudgetTracker.apk", and tap "Install".
+    echo.
+) else (
+    :: 6. Launch Application
+    echo [STEP 3/3] Launching Budget Tracker application...
+    %ADB_CMD% shell am start -n com.budgettracker/.MainActivity
+    echo.
+    echo ======================================================================
+    echo [SUCCESS] Budget Tracker APK installed and launched successfully!
+    echo ======================================================================
 )
-echo.
 
-:: 6. Launch Application
-echo [STEP 3/3] Launching Budget Tracker application...
-%ADB_CMD% shell am start -n com.budgettracker/.MainActivity
-echo.
-echo ======================================================================
-echo [SUCCESS] Budget Tracker APK installed and launched successfully!
-echo ======================================================================
 echo.
 pause
