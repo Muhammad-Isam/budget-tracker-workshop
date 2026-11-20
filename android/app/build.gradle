@@ -18,7 +18,8 @@ react {
     // cliFile = file("../../node_modules/react-native/cli.js")
 
     /* Variants */
-    // If debuggableVariants is empty, JS bundling is always included (standalone offline mode)
+    //   The list of variants that are debuggable. Set to empty array to ensure
+    //   the JS bundle is compiled into index.android.bundle using Hermes bytecode.
     debuggableVariants = []
 
     /* Bundling */
@@ -75,9 +76,9 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
-    namespace "com.budgettrackerapp"
+    namespace "com.budgettracker"
     defaultConfig {
-        applicationId "com.budgettrackerapp"
+        applicationId "com.budgettracker"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
